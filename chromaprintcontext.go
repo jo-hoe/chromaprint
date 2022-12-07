@@ -38,5 +38,7 @@ func NewChromaprintCtx(filePath string) (*ChromaprintCtx, error) {
 }
 
 // should follow
-// https://dev.to/gopher/getting-started-with-go-context-l7g
+// https://mauricio.github.io/2022/02/07/gof-patterns-in-golang.html
 // or https://golang.cafe/blog/golang-functional-options-pattern.html
+// option pattern for immutables
+// builder for changing option

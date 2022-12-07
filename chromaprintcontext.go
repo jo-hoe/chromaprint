@@ -37,26 +37,6 @@ func NewChromaprintCtx(filePath string) (*ChromaprintCtx, error) {
 	}, nil
 }
 
-func (ctx *ChromaprintCtx) SetSampleRateInHz(sampleRate int) {
-	ctx.sampleRateInHz = sampleRate
-}
-
-func (ctx *ChromaprintCtx) SetChannels(channels int) {
-	ctx.channels = channels
-}
-
-func (ctx *ChromaprintCtx) SetMaxFingerPrintLength(maxFingerPrintLength int) {
-	ctx.maxFingerPrintLength = maxFingerPrintLength
-}
-
-func (ctx *ChromaprintCtx) ChunkSizeInSeconds(chunkSizeInSeconds int) {
-	ctx.chunkSizeInSeconds = chunkSizeInSeconds
-}
-
-func (ctx *ChromaprintCtx) SetOverlap(overlap bool) {
-	ctx.overlap = overlap
-}
-
-func (ctx *ChromaprintCtx) SetAlgorithm(algorithm int) {
-	ctx.algorithm = algorithm
-}
+// should follow
+// https://dev.to/gopher/getting-started-with-go-context-l7g
+// or https://golang.cafe/blog/golang-functional-options-pattern.html

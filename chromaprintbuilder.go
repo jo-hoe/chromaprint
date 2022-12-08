@@ -1,13 +1,18 @@
 package chromaprint
 
-import (
-	"errors"
-	"os"
+import "runtime"
+
+var (
+	fpcalcFileName   = "fpcalc"
+	windowsExtension = ".exe"
 )
 
-func NewBuilder(chromaprintFilePath string) (*builder, error) {
-	if _, err := os.Stat(chromaprintFilePath); errors.Is(err, os.ErrNotExist) {
-		return nil, os.ErrNotExist
+func NewBuilder() (*builder, error) {
+	// on mac and linux file default name is "fpcalc"
+	// and on windows it is"fpcalc.exe"
+	chromaprintFilePath := fpcalcFileName
+	if runtime.GOOS == "windows" {
+		chromaprintFilePath = chromaprintFilePath + windowsExtension
 	}
 
 	return &builder{

@@ -36,3 +36,7 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 
 	return result, nil
 }
+
+func (c *Chromaprint) GetVersion() string {
+	return ""
+}

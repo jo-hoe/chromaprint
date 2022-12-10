@@ -1,6 +1,10 @@
 package chromaprint
 
-import "runtime"
+import (
+	"os"
+	"path/filepath"
+	"runtime"
+)
 
 var (
 	fpcalcFileName   = "fpcalc"
@@ -15,8 +19,13 @@ func NewBuilder() (*builder, error) {
 		chromaprintFilePath = chromaprintFilePath + windowsExtension
 	}
 
+	folder, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+
 	return &builder{
-		filePath:             chromaprintFilePath,
+		filePath:             filepath.Join(folder, chromaprintFilePath),
 		sampleRateInHz:       -1,
 		channels:             -1,
 		maxFingerPrintLength: -1,
@@ -42,7 +51,7 @@ type builder struct {
 	algorithm            int
 }
 
-func (b *builder) WithFilePath(filePath string) *builder {
+func (b *builder) WithPathToChromaprint(filePath string) *builder {
 	b.filePath = filePath
 	return b
 }

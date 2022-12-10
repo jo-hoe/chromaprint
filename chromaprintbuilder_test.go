@@ -33,7 +33,7 @@ func Test_builder_Build(t *testing.T) {
 			},
 		}, {
 			name: "full bild",
-			b:    newBuilder(t).WithFilePath("test").WithSampleRate(44100).WithChannels(2).WithMaxFingerPrintLength(120).WithChunksSize(5).WithAlgorithm(1).WithOverlap(true),
+			b:    newBuilder(t).WithPathToChromaprint("test").WithSampleRate(44100).WithChannels(2).WithMaxFingerPrintLength(120).WithChunksSize(5).WithAlgorithm(1).WithOverlap(true),
 			want: &Chromaprint{
 				options: builder{
 					filePath:             "test",

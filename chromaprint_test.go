@@ -73,6 +73,10 @@ func Test_addInt(t *testing.T) {
 }
 
 func TestChromaprint_GetVersion(t *testing.T) {
+	// cannot execute binaries in github
+	// test will be skipped
+	checkPrerequisites(t)
+
 	tests := []struct {
 		name    string
 		c       *Chromaprint
@@ -124,4 +128,11 @@ func getDefaultChromaprint(t *testing.T) *Chromaprint {
 		},
 	}
 	return &result
+}
+
+// Skips integration test if requirements are not meet
+func checkPrerequisites(t *testing.T) {
+	if os.Getenv("GITHUB_ACTIONS") == "true" {
+		t.Skip("Test will be skipped in Github Context")
+	}
 }

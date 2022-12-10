@@ -42,7 +42,25 @@ func TestChromaprint_getArgs(t *testing.T) {
 		c    *Chromaprint
 		want string
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			c:    getDefaultChromaprint(t),
+			want: "",
+		}, {
+			name: "default",
+			c: &Chromaprint{
+				options: builder{
+					filePath:             "test",
+					sampleRateInHz:       44100,
+					channels:             2,
+					maxFingerPrintLength: 120,
+					chunkSizeInSeconds:   5,
+					overlap:              true,
+					algorithm:            1,
+				},
+			},
+			want: " -rate 44100 -channels 2 -length 120 -chunk 5 -algorithm 1 -overlap",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -54,21 +72,13 @@ func TestChromaprint_getArgs(t *testing.T) {
 }
 
 func Test_addInt(t *testing.T) {
-	type args struct {
-		builder *strings.Builder
-		argName string
-		value   int
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			addInt(tt.args.builder, tt.args.argName, tt.args.value)
-		})
+	builder := strings.Builder{}
+	addInt(&builder, "test", 1)
+
+	expected := " -test 1"
+	actual := builder.String()
+	if actual != expected {
+		t.Errorf("expected '%s' actual '%s'", expected, actual)
 	}
 }
 
@@ -124,7 +134,13 @@ func getDefaultChromaprint(t *testing.T) *Chromaprint {
 
 	result := Chromaprint{
 		options: builder{
-			filePath: filePath,
+			filePath:             filePath,
+			sampleRateInHz:       -1,
+			channels:             -1,
+			maxFingerPrintLength: -1,
+			chunkSizeInSeconds:   -1,
+			overlap:              false,
+			algorithm:            -1,
 		},
 	}
 	return &result

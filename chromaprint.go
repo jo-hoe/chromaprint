@@ -42,13 +42,13 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 func (c *Chromaprint) getArgs() string {
 	var stringBuilder strings.Builder
 
-	addInt(&stringBuilder, "channels", c.options.channels)
-	addInt(&stringBuilder, "algorithm", c.options.algorithm)
-	addInt(&stringBuilder, "chunk", c.options.chunkSizeInSeconds)
-	addInt(&stringBuilder, "length", c.options.maxFingerPrintLength)
 	addInt(&stringBuilder, "rate", c.options.sampleRateInHz)
+	addInt(&stringBuilder, "channels", c.options.channels)
+	addInt(&stringBuilder, "length", c.options.maxFingerPrintLength)
+	addInt(&stringBuilder, "chunk", c.options.chunkSizeInSeconds)
+	addInt(&stringBuilder, "algorithm", c.options.algorithm)
 	if c.options.overlap {
-		_, err := stringBuilder.WriteString("-overlap")
+		_, err := stringBuilder.WriteString(" -overlap")
 		log.Printf("%+v", err)
 	}
 
@@ -57,7 +57,7 @@ func (c *Chromaprint) getArgs() string {
 
 func addInt(builder *strings.Builder, argName string, value int) {
 	if value != -1 {
-		_, err := builder.WriteString(fmt.Sprintf("-%s ", argName))
+		_, err := builder.WriteString(fmt.Sprintf(" -%s ", argName))
 		log.Printf("%+v", err)
 		_, err = builder.WriteString(fmt.Sprint(value))
 		log.Printf("%+v", err)

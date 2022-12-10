@@ -6,199 +6,46 @@ import (
 	"testing"
 )
 
-func TestNewBuilder(t *testing.T) {
+func Test_builder_Build(t *testing.T) {
 	filename := "fpcalc"
 	if runtime.GOOS == "windows" {
 		filename = filename + ".exe"
 	}
 
 	tests := []struct {
-		name    string
-		want    *builder
-		wantErr bool
-	}{
-		{
-			name: "init",
-			want: &builder{
-				filePath:             filename,
-				sampleRateInHz:       -1,
-				channels:             -1,
-				maxFingerPrintLength: -1,
-				chunkSizeInSeconds:   -1,
-				algorithm:            -1,
-				overlap:              false,
-			},
-			wantErr: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewBuilder()
-			if (err != nil) != tt.wantErr {
-				t.Errorf("NewBuilder() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewBuilder() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithFilePath(t *testing.T) {
-	type args struct {
-		filePath string
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithFilePath(tt.args.filePath); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithFilePath() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithSampleRate(t *testing.T) {
-	type args struct {
-		rateInHz int
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithSampleRate(tt.args.rateInHz); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithSampleRate() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithChannels(t *testing.T) {
-	type args struct {
-		numberOfChannels int
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithChannels(tt.args.numberOfChannels); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithChannels() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithMaxFingerPrintLength(t *testing.T) {
-	type args struct {
-		length int
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithMaxFingerPrintLength(tt.args.length); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithMaxFingerPrintLength() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithChunksSize(t *testing.T) {
-	type args struct {
-		chunkSizeInSeconds int
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithChunksSize(tt.args.chunkSizeInSeconds); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithChunksSize() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithAlgorithm(t *testing.T) {
-	type args struct {
-		algorithm int
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithAlgorithm(tt.args.algorithm); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithAlgorithm() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_WithOverlap(t *testing.T) {
-	type args struct {
-		overlap bool
-	}
-	tests := []struct {
-		name string
-		b    *builder
-		args args
-		want *builder
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.b.WithOverlap(tt.args.overlap); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("builder.WithOverlap() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func Test_builder_Build(t *testing.T) {
-	tests := []struct {
 		name string
 		b    *builder
 		want *Chromaprint
 	}{
-		// TODO: Add test cases.
+		{
+			name: "default",
+			b:    newBuilder(t),
+			want: &Chromaprint{
+				options: builder{
+					filePath:             filename,
+					sampleRateInHz:       -1,
+					channels:             -1,
+					maxFingerPrintLength: -1,
+					chunkSizeInSeconds:   -1,
+					algorithm:            -1,
+					overlap:              false,
+				},
+			},
+		}, {
+			name: "full bild",
+			b:    newBuilder(t).WithFilePath("test").WithSampleRate(44100).WithChannels(2).WithMaxFingerPrintLength(120).WithChunksSize(5).WithAlgorithm(1).WithOverlap(true),
+			want: &Chromaprint{
+				options: builder{
+					filePath:             "test",
+					sampleRateInHz:       44100,
+					channels:             2,
+					maxFingerPrintLength: 120,
+					chunkSizeInSeconds:   5,
+					algorithm:            1,
+					overlap:              true,
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -207,4 +54,12 @@ func Test_builder_Build(t *testing.T) {
 			}
 		})
 	}
+}
+
+func newBuilder(t *testing.T) *builder {
+	result, err := NewBuilder()
+	if err != nil {
+		t.Error(err)
+	}
+	return result
 }

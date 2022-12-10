@@ -5,8 +5,11 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
-	"strings"
 	"testing"
+)
+
+var (
+	testMP3 = "edgar-allen-poe-the-telltale-heart-original.mp3"
 )
 
 func TestChromaprint_CreateFingerprints(t *testing.T) {
@@ -20,7 +23,88 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 		want    []Fingerprint
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name: "no executable",
+			c:    &Chromaprint{},
+			args: args{
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+			},
+			want:    make([]Fingerprint, 0),
+			wantErr: true,
+		}, {
+			name: "no mp3",
+			c: &Chromaprint{
+				options: builder{
+					filePath: getExecutable(t),
+				},
+			},
+			args: args{
+				filepathToAudioFile: "none_existing.mp3",
+			},
+			want:    make([]Fingerprint, 0),
+			wantErr: true,
+		}, {
+			name: "wrong config",
+			c: &Chromaprint{
+				options: builder{
+					filePath:             getExecutable(t),
+					maxFingerPrintLength: 0,
+				},
+			},
+			args: args{
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+			},
+			want:    make([]Fingerprint, 0),
+			wantErr: true,
+		}, {
+			name: "default positiv test",
+			c: &Chromaprint{
+				options: builder{
+					filePath:             getExecutable(t),
+					sampleRateInHz:       -1,
+					channels:             -1,
+					maxFingerPrintLength: 3,
+					chunkSizeInSeconds:   -1,
+					overlap:              false,
+					algorithm:            -1,
+				},
+			},
+			args: args{
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+			},
+			want: []Fingerprint{{
+				Timestamp:   0,
+				Duration:    1059.97,
+				Fingerprint: []int{1920772148, 1932307492, 1999416352},
+			}},
+			wantErr: false,
+		}, {
+			name: "chucked",
+			c: &Chromaprint{
+				options: builder{
+					filePath:             getExecutable(t),
+					sampleRateInHz:       -1,
+					channels:             -1,
+					maxFingerPrintLength: 6,
+					chunkSizeInSeconds:   3,
+					overlap:              false,
+					algorithm:            -1,
+				},
+			},
+			args: args{
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+			},
+			want: []Fingerprint{{
+				Timestamp:   0,
+				Duration:    3,
+				Fingerprint: []int{1920772148, 1932307492, 1999416352},
+			}, {
+				Timestamp:   3,
+				Duration:    3,
+				Fingerprint: []int{1390452773, 1390455845, 1398844461},
+			}},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -36,57 +120,17 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 	}
 }
 
-func TestChromaprint_getArgs(t *testing.T) {
-	tests := []struct {
-		name string
-		c    *Chromaprint
-		want string
-	}{
-		{
-			name: "default",
-			c:    getDefaultChromaprint(t),
-			want: "",
-		}, {
-			name: "default",
-			c: &Chromaprint{
-				options: builder{
-					filePath:             "test",
-					sampleRateInHz:       44100,
-					channels:             2,
-					maxFingerPrintLength: 120,
-					chunkSizeInSeconds:   5,
-					overlap:              true,
-					algorithm:            1,
-				},
-			},
-			want: " -rate 44100 -channels 2 -length 120 -chunk 5 -algorithm 1 -overlap",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.c.getArgs(); got != tt.want {
-				t.Errorf("Chromaprint.getArgs() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
 func Test_addInt(t *testing.T) {
-	builder := strings.Builder{}
-	addInt(&builder, "test", 1)
+	actual := make([]string, 0)
+	addInt(&actual, "test", 1)
 
-	expected := " -test 1"
-	actual := builder.String()
-	if actual != expected {
+	expected := []string{"-test", "1"}
+	if !reflect.DeepEqual(expected, actual) {
 		t.Errorf("expected '%s' actual '%s'", expected, actual)
 	}
 }
 
 func TestChromaprint_GetVersion(t *testing.T) {
-	// cannot execute binaries in github
-	// test will be skipped
-	checkPrerequisites(t)
-
 	tests := []struct {
 		name    string
 		c       *Chromaprint
@@ -114,7 +158,16 @@ func TestChromaprint_GetVersion(t *testing.T) {
 	}
 }
 
-func getDefaultChromaprint(t *testing.T) *Chromaprint {
+func getTestFolderPath(t *testing.T) string {
+	// get test resource folder
+	testFileFolder, err := os.Getwd()
+	if err != nil {
+		t.Error(err)
+	}
+	return filepath.Join(testFileFolder, "testresources")
+}
+
+func getExecutable(t *testing.T) string {
 	// get os dependend file name
 	filename := "fpcalc"
 	if runtime.GOOS == "windows" {
@@ -125,16 +178,15 @@ func getDefaultChromaprint(t *testing.T) *Chromaprint {
 		filename = "linux-" + filename
 	}
 
-	// get test resource folder
-	testFileFolder, err := os.Getwd()
-	if err != nil {
-		t.Error(err)
-	}
-	filePath := filepath.Join(testFileFolder, "testresources", filename)
+	return filepath.Join(getTestFolderPath(t), filename)
+}
+
+func getDefaultChromaprint(t *testing.T) *Chromaprint {
+	executable := getExecutable(t)
 
 	result := Chromaprint{
 		options: builder{
-			filePath:             filePath,
+			filePath:             executable,
 			sampleRateInHz:       -1,
 			channels:             -1,
 			maxFingerPrintLength: -1,
@@ -144,6 +196,41 @@ func getDefaultChromaprint(t *testing.T) *Chromaprint {
 		},
 	}
 	return &result
+}
+
+func TestChromaprint_getArgs(t *testing.T) {
+	tests := []struct {
+		name string
+		c    *Chromaprint
+		want []string
+	}{
+		{
+			name: "default",
+			c:    getDefaultChromaprint(t),
+			want: make([]string, 0),
+		}, {
+			name: "default",
+			c: &Chromaprint{
+				options: builder{
+					filePath:             "test",
+					sampleRateInHz:       44100,
+					channels:             2,
+					maxFingerPrintLength: 120,
+					chunkSizeInSeconds:   5,
+					overlap:              true,
+					algorithm:            1,
+				},
+			},
+			want: []string{"-rate", "44100", "-channels", "2", "-length", "120", "-chunk", "5", "-algorithm", "1", "-overlap"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := tt.c.getArgs(); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Chromaprint.getArgs() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
 
 // Skips integration test if requirements are not meet

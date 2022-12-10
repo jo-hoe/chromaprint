@@ -11,28 +11,16 @@ var (
 	windowsExtension = ".exe"
 )
 
-func NewBuilder() (*builder, error) {
-	// on mac and linux file default name is "fpcalc"
-	// and on windows it is"fpcalc.exe"
-	chromaprintFilePath := fpcalcFileName
-	if runtime.GOOS == "windows" {
-		chromaprintFilePath = chromaprintFilePath + windowsExtension
-	}
-
-	folder, err := os.Getwd()
-	if err != nil {
-		return nil, err
-	}
-
+func NewBuilder() *builder {
 	return &builder{
-		filePath:             filepath.Join(folder, chromaprintFilePath),
+		filePath:             "",
 		sampleRateInHz:       -1,
 		channels:             -1,
 		maxFingerPrintLength: -1,
 		chunkSizeInSeconds:   -1,
 		overlap:              false,
 		algorithm:            -1,
-	}, nil
+	}
 }
 
 // ChromaprintBuilder defines the fields we want to set on this builder, you could add/remove
@@ -86,8 +74,24 @@ func (b *builder) WithOverlap(overlap bool) *builder {
 	return b
 }
 
-func (b *builder) Build() *Chromaprint {
+func (b *builder) Build() (*Chromaprint, error) {
+	if b.filePath == "" {
+		// on mac and linux file default name is "fpcalc"
+		// and on windows it is"fpcalc.exe"
+		chromaprintFilePath := fpcalcFileName
+		if runtime.GOOS == "windows" {
+			chromaprintFilePath = chromaprintFilePath + windowsExtension
+		}
+
+		folder, err := os.Getwd()
+		if err != nil {
+			return nil, err
+		}
+
+		b.filePath = filepath.Join(folder, chromaprintFilePath)
+	}
+
 	return &Chromaprint{
 		options: *b,
-	}
+	}, nil
 }

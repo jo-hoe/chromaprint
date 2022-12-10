@@ -7,14 +7,13 @@ import (
 )
 
 func main() {
-	// assuming both fpcalc.exe (aka chromaprint)
+	// assuming fpcalc.exe (aka chromaprint)
 	// is in the same directory as this executable
-	builder, err := chromaprint.NewBuilder()
+	chromapint, err := chromaprint.NewBuilder().Build()
 	if err != nil {
 		fmt.Print(err)
 		return
 	}
-	chromapint := builder.Build()
 	fingerprints, err := chromapint.CreateFingerprints("my.mp3")
 	if err != nil {
 		fmt.Print(err)

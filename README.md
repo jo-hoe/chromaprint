@@ -13,7 +13,7 @@ However, it is not interoperable and does not run on windows.
 
 ## Example
 
-```golang
+```go
 package main
 
 import (

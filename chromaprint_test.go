@@ -232,10 +232,3 @@ func TestChromaprint_getArgs(t *testing.T) {
 		})
 	}
 }
-
-// Skips integration test if requirements are not meet
-func checkPrerequisites(t *testing.T) {
-	if os.Getenv("GITHUB_ACTIONS") == "true" {
-		t.Skip("Test will be skipped in Github Context")
-	}
-}

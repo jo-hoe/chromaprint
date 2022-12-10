@@ -42,6 +42,41 @@ type builder struct {
 	algorithm            int
 }
 
+func (b *builder) WithFilePath(filePath string) *builder {
+	b.filePath = filePath
+	return b
+}
+
+func (b *builder) WithSampleRate(rateInHz int) *builder {
+	b.sampleRateInHz = rateInHz
+	return b
+}
+
+func (b *builder) WithChannels(numberOfChannels int) *builder {
+	b.channels = numberOfChannels
+	return b
+}
+
+func (b *builder) WithMaxFingerPrintLength(length int) *builder {
+	b.maxFingerPrintLength = length
+	return b
+}
+
+func (b *builder) WithChunksSize(chunkSizeInSeconds int) *builder {
+	b.chunkSizeInSeconds = chunkSizeInSeconds
+	return b
+}
+
+func (b *builder) WithAlgorithm(algorithm int) *builder {
+	b.algorithm = algorithm
+	return b
+}
+
+func (b *builder) WithOverlap(overlap bool) *builder {
+	b.overlap = overlap
+	return b
+}
+
 func (b *builder) Build() *Chromaprint {
 	return &Chromaprint{
 		options: *b,

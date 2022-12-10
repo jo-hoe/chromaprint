@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 type Chromaprint struct {
@@ -24,7 +26,7 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 		return nil, os.ErrNotExist
 	}
 
-	out, err := exec.Command(c.options.filePath, filepathToAudioFile, "-json", "-raw").Output()
+	out, err := exec.Command(c.options.filePath, filepathToAudioFile, "-json", "-raw", c.getArgs()).Output()
 	if err != nil {
 		return result, err
 	}
@@ -37,6 +39,32 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 	return result, nil
 }
 
-func (c *Chromaprint) GetVersion() string {
-	return ""
+func (c *Chromaprint) getArgs() string {
+	var stringBuilder strings.Builder
+
+	addInt(&stringBuilder, "channels", c.options.channels)
+	addInt(&stringBuilder, "algorithm", c.options.algorithm)
+	addInt(&stringBuilder, "chunk", c.options.chunkSizeInSeconds)
+	addInt(&stringBuilder, "length", c.options.maxFingerPrintLength)
+	addInt(&stringBuilder, "rate", c.options.sampleRateInHz)
+	if c.options.overlap {
+		_, err := stringBuilder.WriteString("-overlap")
+		log.Printf("%+v", err)
+	}
+
+	return stringBuilder.String()
+}
+
+func addInt(builder *strings.Builder, argName string, value int) {
+	if value != -1 {
+		_, err := builder.WriteString(fmt.Sprintf("-%s ", argName))
+		log.Printf("%+v", err)
+		_, err = builder.WriteString(fmt.Sprint(value))
+		log.Printf("%+v", err)
+	}
+}
+
+func (c *Chromaprint) GetVersion() (string, error) {
+	result, err := exec.Command(c.options.filePath, "-version").Output()
+	return strings.TrimSpace(string(result)), err
 }

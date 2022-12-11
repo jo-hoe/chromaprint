@@ -33,7 +33,7 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 		return result, err
 	}
 
-	// even if json format is choosen result value is not json
+	// even if json format is chosen result value is not json
 	// but a set of loose json elements
 	// convert output into real json array of json element
 	jsonString := strings.TrimSpace(string(out))

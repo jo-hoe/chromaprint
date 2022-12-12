@@ -27,7 +27,7 @@ func Test_builder_Build(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "default",
+			name: "default build",
 			b:    NewBuilder(),
 			want: &Chromaprint{
 				options: builder{
@@ -42,7 +42,7 @@ func Test_builder_Build(t *testing.T) {
 			},
 			wantErr: false,
 		}, {
-			name: "full bild",
+			name: "full build",
 			b:    NewBuilder().WithPathToChromaprint("test").WithSampleRate(44100).WithChannels(2).WithMaxFingerPrintLength(120).WithChunksSize(5).WithAlgorithm(1).WithOverlap(true),
 			want: &Chromaprint{
 				options: builder{

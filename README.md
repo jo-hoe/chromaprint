@@ -9,7 +9,8 @@
 
 OS independent wrapper for [chromaprint](https://github.com/acoustid/chromaprint).
 There exists already a [chromaprint API](https://github.com/go-fingerprint/gochroma).
-However, it is not interoperable and does not run on windows.
+However, uses cgo, is not interoperable and does not run on windows out of the box.
+This wrapper removes the cgo dependency and allows to run chromaprint on any OS.
 
 ## Example
 

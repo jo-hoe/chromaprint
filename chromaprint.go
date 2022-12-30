@@ -16,6 +16,7 @@ type Chromaprint struct {
 type Fingerprint struct {
 	Timestamp   float64 `json:"timestamp"`
 	Duration    float64 `json:"duration"`
+        // TODO: convert into uint32
 	Fingerprint []int   `json:"fingerprint"`
 }
 

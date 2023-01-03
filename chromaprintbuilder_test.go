@@ -34,7 +34,7 @@ func Test_builder_Build(t *testing.T) {
 					filePath:             filePath,
 					sampleRateInHz:       -1,
 					channels:             -1,
-					maxFingerPrintLength: 120,
+					maxFingerPrintLength: 0,
 					chunkSizeInSeconds:   -1,
 					algorithm:            2,
 					overlap:              false,

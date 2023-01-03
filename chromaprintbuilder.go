@@ -17,7 +17,7 @@ func NewBuilder() ChromaprintBuilder {
 		filePath:             "",
 		sampleRateInHz:       -1,
 		channels:             -1,
-		maxFingerPrintLength: 120,
+		maxFingerPrintLength: 0,
 		chunkSizeInSeconds:   -1,
 		overlap:              false,
 		algorithm:            2,
@@ -35,9 +35,7 @@ type ChromaprintBuilder interface {
 	WithSampleRate(rateInHz int) ChromaprintBuilder
 	// Set the number of channels in the input audio
 	WithChannels(numberOfChannels int) ChromaprintBuilder
-	// Restrict the duration of the process input audio (default is 120). 
-	// This default is taken from the CLI. Can also be set to math.MaxInt 
-	// to process the fingerprint for the whole input audio.
+	// Restrict the duration of the process input audio (default is unrestricted).
 	WithMaxFingerPrintLength(lengthInSeconds int) ChromaprintBuilder
 	// Split the input audio into chunks of this duration
 	WithChunksSize(chunkSizeInSeconds int) ChromaprintBuilder

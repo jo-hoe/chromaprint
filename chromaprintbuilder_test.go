@@ -22,7 +22,7 @@ func Test_builder_Build(t *testing.T) {
 
 	tests := []struct {
 		name    string
-		b       *builder
+		b       ChromaprintBuilder
 		want    *Chromaprint
 		wantErr bool
 	}{

@@ -12,7 +12,7 @@ var (
 )
 
 // Create a chromaprint builder
-func NewBuilder() *builder {
+func NewBuilder() ChromaprintBuilder {
 	return &builder{
 		filePath:             "",
 		sampleRateInHz:       -1,
@@ -27,7 +27,22 @@ func NewBuilder() *builder {
 // ChromaprintBuilder defines the fields we want to set on this builder, you could add/remove
 // fields here.
 type ChromaprintBuilder interface {
+	// Builds the Chromaprint object
 	Build() (*Chromaprint, error)
+	// Use this to specify the path to the Chromaprint CLI file.
+	WithPathToChromaprint(filePath string) ChromaprintBuilder
+	// Set the sample rate of the input audio
+	WithSampleRate(rateInHz int) ChromaprintBuilder
+	// Set the number of channels in the input audio
+	WithChannels(numberOfChannels int) ChromaprintBuilder
+	// Restrict the duration of the process input audio (default is 120)
+	WithMaxFingerPrintLength(length int) ChromaprintBuilder
+	// Split the input audio into chunks of this duration
+	WithChunksSize(chunkSizeInSeconds int) ChromaprintBuilder
+	// Set the algorithm method (default 2)
+	WithAlgorithm(algorithm int) ChromaprintBuilder
+	// Overlap the chunks slightly to make sure audio on the edges is fingerprinted
+	WithOverlap(overlap bool) ChromaprintBuilder
 }
 
 type builder struct {
@@ -40,49 +55,42 @@ type builder struct {
 	algorithm            int
 }
 
-// Use this to specify the path to the Chromaprint CLI file.
-func (b *builder) WithPathToChromaprint(filePath string) *builder {
+func (b *builder) WithPathToChromaprint(filePath string) ChromaprintBuilder {
 	b.filePath = filePath
 	return b
 }
 
-// Set the sample rate of the input audio
-func (b *builder) WithSampleRate(rateInHz int) *builder {
+func (b *builder) WithSampleRate(rateInHz int) ChromaprintBuilder {
 	b.sampleRateInHz = rateInHz
 	return b
 }
 
 // Set the number of channels in the input audio
-func (b *builder) WithChannels(numberOfChannels int) *builder {
+func (b *builder) WithChannels(numberOfChannels int) ChromaprintBuilder {
 	b.channels = numberOfChannels
 	return b
 }
 
-// Restrict the duration of the process input audio (default is 120)
-func (b *builder) WithMaxFingerPrintLength(length int) *builder {
+func (b *builder) WithMaxFingerPrintLength(length int) ChromaprintBuilder {
 	b.maxFingerPrintLength = length
 	return b
 }
 
-// Split the input audio into chunks of this duration
-func (b *builder) WithChunksSize(chunkSizeInSeconds int) *builder {
+func (b *builder) WithChunksSize(chunkSizeInSeconds int) ChromaprintBuilder {
 	b.chunkSizeInSeconds = chunkSizeInSeconds
 	return b
 }
 
-// Set the algorithm method (default 2)
-func (b *builder) WithAlgorithm(algorithm int) *builder {
+func (b *builder) WithAlgorithm(algorithm int) ChromaprintBuilder {
 	b.algorithm = algorithm
 	return b
 }
 
-// Overlap the chunks slightly to make sure audio on the edges is fingerprinted
-func (b *builder) WithOverlap(overlap bool) *builder {
+func (b *builder) WithOverlap(overlap bool) ChromaprintBuilder {
 	b.overlap = overlap
 	return b
 }
 
-// Builds the Chromaprint object
 func (b *builder) Build() (*Chromaprint, error) {
 	if b.filePath == "" {
 		// on mac and linux file default name is "fpcalc"

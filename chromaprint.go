@@ -14,8 +14,11 @@ type Chromaprint struct {
 }
 
 type Fingerprint struct {
+	// timestamp in the input audio (starts from 0) 
 	Timestamp   float64  `json:"timestamp"`
+	// duration of the fingerprint
 	Duration    float64  `json:"duration"`
+	// fingerprint of the input audio
 	Fingerprint []uint32 `json:"fingerprint"`
 }
 

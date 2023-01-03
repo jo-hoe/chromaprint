@@ -14,12 +14,15 @@ type Chromaprint struct {
 }
 
 type Fingerprint struct {
-	Timestamp   float64 `json:"timestamp"`
-	Duration    float64 `json:"duration"`
-        // TODO: convert into uint32
-	Fingerprint []int   `json:"fingerprint"`
+	Timestamp   float64  `json:"timestamp"`
+	Duration    float64  `json:"duration"`
+	Fingerprint []uint32 `json:"fingerprint"`
 }
 
+// Create a list of slice prints
+// filepathToAudioFile is the file path to the audio file.
+// In case an error is identified the fingerprint slice will
+// be of length 0 and error will not be nil.
 func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerprint, error) {
 	result := make([]Fingerprint, 0)
 
@@ -74,6 +77,8 @@ func addInt(args *[]string, argName string, value int) {
 	}
 }
 
+// Returns to used version of Chomaprint e.g.:
+// 'fpcalc version 1.5.1 (FFmpeg Lavc58.134.100 Lavf58.76.100 SwR3.9.100)'
 func (c *Chromaprint) GetVersion() (string, error) {
 	result, err := exec.Command(c.options.filePath, "-version").Output()
 	return strings.TrimSpace(string(result)), err

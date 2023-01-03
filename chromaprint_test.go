@@ -75,7 +75,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			want: []Fingerprint{{
 				Timestamp:   0,
 				Duration:    1059.97,
-				Fingerprint: []int{1920772148, 1932307492, 1999416352},
+				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},
 			}},
 			wantErr: false,
 		}, {
@@ -97,11 +97,11 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			want: []Fingerprint{{
 				Timestamp:   0,
 				Duration:    3,
-				Fingerprint: []int{1920772148, 1932307492, 1999416352},
+				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},
 			}, {
 				Timestamp:   3,
 				Duration:    3,
-				Fingerprint: []int{1390452773, 1390455845, 1398844461},
+				Fingerprint: []uint32{1390452773, 1390455845, 1398844461},
 			}},
 			wantErr: false,
 		},

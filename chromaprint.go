@@ -13,7 +13,7 @@ type Chromaprint struct {
 	options builder
 }
 
-type Fingerprint struct {
+type FingerprintData struct {
 	// timestamp in the input audio (starts from 0)
 	Timestamp float64 `json:"timestamp"`
 	// duration of the fingerprint
@@ -26,8 +26,8 @@ type Fingerprint struct {
 // filepathToAudioFile is the file path to the audio file.
 // In case an error is identified the fingerprint slice will
 // be of length 0 and error will not be nil.
-func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerprint, error) {
-	result := make([]Fingerprint, 0)
+func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]FingerprintData, error) {
+	result := make([]FingerprintData, 0)
 
 	if _, err := os.Stat(filepathToAudioFile); errors.Is(err, os.ErrNotExist) {
 		return result, os.ErrNotExist

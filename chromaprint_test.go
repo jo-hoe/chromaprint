@@ -20,7 +20,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 		name    string
 		c       *Chromaprint
 		args    args
-		want    []Fingerprint
+		want    []FingerprintData
 		wantErr bool
 	}{
 		{
@@ -29,7 +29,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			args: args{
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
 			},
-			want:    make([]Fingerprint, 0),
+			want:    make([]FingerprintData, 0),
 			wantErr: true,
 		}, {
 			name: "no mp3",
@@ -41,7 +41,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			args: args{
 				filepathToAudioFile: "none_existing.mp3",
 			},
-			want:    make([]Fingerprint, 0),
+			want:    make([]FingerprintData, 0),
 			wantErr: true,
 		}, {
 			name: "wrong config",
@@ -54,7 +54,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			args: args{
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
 			},
-			want:    make([]Fingerprint, 0),
+			want:    make([]FingerprintData, 0),
 			wantErr: true,
 		}, {
 			name: "default positiv test",
@@ -72,7 +72,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			args: args{
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
 			},
-			want: []Fingerprint{{
+			want: []FingerprintData{{
 				Timestamp:   0,
 				Duration:    1059.97,
 				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},
@@ -94,7 +94,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 			args: args{
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
 			},
-			want: []Fingerprint{{
+			want: []FingerprintData{{
 				Timestamp:   0,
 				Duration:    3,
 				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},

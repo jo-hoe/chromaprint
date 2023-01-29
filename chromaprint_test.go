@@ -9,7 +9,8 @@ import (
 )
 
 var (
-	testMP3 = "edgar-allen-poe-the-telltale-heart-original.mp3"
+	testMP3             = "edgar-allen-poe-the-telltale-heart-original.mp3"
+	testMP3_Folder_Name = "mp3"
 )
 
 func TestChromaprint_CreateFingerprints(t *testing.T) {
@@ -70,7 +71,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 				},
 			},
 			args: args{
-				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3_Folder_Name, testMP3),
 			},
 			want: []FingerprintData{{
 				Timestamp:   0,
@@ -92,7 +93,7 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 				},
 			},
 			args: args{
-				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3),
+				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3_Folder_Name, testMP3),
 			},
 			want: []FingerprintData{{
 				Timestamp:   0,
@@ -164,7 +165,7 @@ func getTestFolderPath(t *testing.T) string {
 	if err != nil {
 		t.Error(err)
 	}
-	return filepath.Join(testFileFolder, "testresources")
+	return filepath.Join(testFileFolder, "test")
 }
 
 func getExecutable(t *testing.T) string {
@@ -178,7 +179,7 @@ func getExecutable(t *testing.T) string {
 		filename = "linux-" + filename
 	}
 
-	return filepath.Join(getTestFolderPath(t), filename)
+	return filepath.Join(getTestFolderPath(t), "binary", filename)
 }
 
 func getDefaultChromaprint(t *testing.T) *Chromaprint {

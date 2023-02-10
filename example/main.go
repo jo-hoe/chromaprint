@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	// assuming fpcalc.exe (aka chromaprint)
-	// is in the same directory as this executable
+	 // assuming fpcalc executable (aka chromaprint) is in the
+	 // avaiable in $PATH. Alternativly use 
+	 // NewBuilder().WithPathToChromaprint("/path/to/fpcalc")
 	chromaprinter, err := chromaprint.NewBuilder().Build()
 	if err != nil {
 		fmt.Print(err)

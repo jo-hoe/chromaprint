@@ -74,9 +74,8 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3_Folder_Name, testMP3),
 			},
 			want: []FingerprintData{{
-				Timestamp:   0,
-				Duration:    1059.97,
-				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},
+				DurationInSeconds: 1059.97,
+				Fingerprint:       []uint32{1920772148, 1932307492, 1999416352},
 			}},
 			wantErr: false,
 		}, {
@@ -96,13 +95,13 @@ func TestChromaprint_CreateFingerprints(t *testing.T) {
 				filepathToAudioFile: filepath.Join(getTestFolderPath(t), testMP3_Folder_Name, testMP3),
 			},
 			want: []FingerprintData{{
-				Timestamp:   0,
-				Duration:    3,
-				Fingerprint: []uint32{1920772148, 1932307492, 1999416352},
+				TimestampInSeconds: 0,
+				DurationInSeconds:  3,
+				Fingerprint:        []uint32{1920772148, 1932307492, 1999416352},
 			}, {
-				Timestamp:   3,
-				Duration:    3,
-				Fingerprint: []uint32{1390452773, 1390455845, 1398844461},
+				TimestampInSeconds: 3,
+				DurationInSeconds:  3,
+				Fingerprint:        []uint32{1390452773, 1390455845, 1398844461},
 			}},
 			wantErr: false,
 		},

@@ -42,6 +42,21 @@ func main() {
 
 ```
 
+## Chromprint
+
+Chromaprint provides a fingerprint for a given audio.
+The aim is to provide a single identifier for a given audio input.
+This identifier should be robust to background noice.
+
+Here is how it rouchly works:
+
+- audio is resampled to mono at 11025Hz
+- the result is cut into frames
+- fast fourier transform is performed to extract frequencies within each chucks
+- certain features are extracted from the these frequencies 
+- these features are converted into an image
+- a fingerprint is calculated from this image
+
 ## Dependency
 
 It is required have a [chromaprint](https://acoustid.org/chromaprint) CLI.

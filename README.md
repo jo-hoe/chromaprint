@@ -57,6 +57,29 @@ Here is how it rouchly works:
 - these features are converted into an image
 - a fingerprint is calculated from this image
 
+### Chromaprint Algorithms
+
+Chromaprint allows to set a algorithm.
+
+```
+// where n is an integer between 1 and 5
+chromaprint.NewBuilder().WithAlgorithm(n)
+```
+
+Each of these provides a different fingerprint with a different granularity.
+Each algorithm also needs a minimum amount of audio data before a fingerprint can be calculated.
+Below is a table showing how long an audio clip has to be before the different algorithms can provide a fingerprint.
+
+|# Algorithm|Minimum seconds of audio|
+|---|---|
+|1|~ 3|
+|2|~ 3|
+|3|~ 7.5|
+|4|~ 3.5|
+|5|~ 2|
+
+Note that these values are only rough approximations and differ depending on the audio input.
+
 ## Dependency
 
 It is required have a [chromaprint](https://acoustid.org/chromaprint) CLI.

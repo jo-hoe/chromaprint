@@ -59,15 +59,15 @@ Here is how it rouchly works:
 
 ### Chromaprint Algorithms
 
-Chromaprint allows to set a algorithm.
+Chromaprint allows to set an algorithm for the generation of fingerprint.
 
 ```
 // where n is an integer between 1 and 5
 chromaprint.NewBuilder().WithAlgorithm(n)
 ```
 
-Each of these provides a different fingerprint with a different granularity.
-Each algorithm also needs a minimum amount of audio data before a fingerprint can be calculated.
+Each of these provides a different fingerprint for a given audio input.
+Each algorithm requires a minimum amount of audio data before a fingerprint can be calculated.
 Below is a table showing how long an audio clip has to be before the different algorithms can provide a fingerprint.
 
 |# Algorithm|Minimum seconds of audio|
@@ -78,7 +78,7 @@ Below is a table showing how long an audio clip has to be before the different a
 |4|~ 3.5|
 |5|~ 2|
 
-Note that these values are only rough approximations and differ depending on the audio input.
+Note, that these values are only rough approximations and differ depending on the audio input.
 
 ## Dependency
 

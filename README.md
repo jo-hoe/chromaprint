@@ -42,7 +42,7 @@ func main() {
 
 ```
 
-## Chromprint
+## Chromaprint
 
 Chromaprint provides a fingerprint for a given audio.
 The aim is to provide a single identifier for a given audio input.

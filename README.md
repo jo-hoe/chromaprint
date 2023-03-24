@@ -14,7 +14,7 @@ This wrapper removes the cgo dependency and allows to run chromaprint by using t
 
 ## Example
 
-```go
+```golang
 package main
 
 import (

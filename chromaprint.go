@@ -15,7 +15,7 @@ type Chromaprint struct {
 
 type FingerprintData struct {
 	// timestamp in the input audio (starts from 0)
-	// useful in case the output consists of various 
+	// useful in case the output consists of various
 	// chunks
 	TimestampInSeconds float64 `json:"timestamp"`
 	// duration of the fingerprint
@@ -47,7 +47,7 @@ func (c *Chromaprint) CreateFingerprints(filepathToAudioFile string) ([]Fingerpr
 	// convert output into real json array of json element
 	jsonString := strings.TrimSpace(string(out))
 	// add comma separation between individual elements
-	jsonString = strings.Replace(jsonString, "}", "},", -1)
+	jsonString = strings.ReplaceAll(jsonString, "}", "},")
 	// cut last unneeded comma
 	jsonString = jsonString[0 : len(jsonString)-1]
 	// add array braces to whole set

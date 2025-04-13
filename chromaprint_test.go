@@ -170,11 +170,12 @@ func getTestFolderPath(t *testing.T) string {
 func getExecutable(t *testing.T) string {
 	// get os dependend file name
 	filename := "fpcalc"
-	if runtime.GOOS == "windows" {
+	switch runtime.GOOS {
+	case "windows":
 		filename = "win-" + filename + ".exe"
-	} else if runtime.GOOS == "darwin" {
+	case "darwin":
 		filename = "macos-" + filename
-	} else {
+	default:
 		filename = "linux-" + filename
 	}
 
